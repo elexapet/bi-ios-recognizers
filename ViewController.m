@@ -9,6 +9,7 @@
 #import "ViewController.h"
 
 @interface ViewController ()
+@property (weak, nonatomic) UISegmentedControl* mySegmentedControl;
 @end
 
 @implementation ViewController
@@ -34,15 +35,21 @@
     [tapGesture requireGestureRecognizerToFail:doubleTapGesture];
     
     [self.view addSubview:v];
-    /*
-    GraphView* graph = [[GraphView alloc] initWithFrame:CGRectMake(10, 200, CGRectGetWidth(self.view.frame)-20, 200)];
+    
+    GraphView* graph = [[GraphView alloc] initWithFrame:CGRectMake(10, 130, CGRectGetWidth(self.view.frame)-20, 200)];
     graph.backgroundColor = [UIColor lightGrayColor];
    
-    _myGraph = graph;
+    self.myGraph = graph;
     
     [self.view addSubview:graph];
-    */
     
+
+    UISegmentedControl* sc = [[UISegmentedControl alloc] initWithItems:@[@"Red",@"Blue",@"Green"]];
+    sc.center = CGPointMake(self.view.frame.size.width-sc.frame.size.width/2-10, 338+sc.frame.size.height/2);
+    sc.selectedSegmentIndex = 0;
+    [sc addTarget:self action:@selector(segmentedAction:) forControlEvents:UIControlEventValueChanged];
+    self.mySegmentedControl = sc;
+    [self.view addSubview:sc];
     
     
     
@@ -81,9 +88,25 @@
 }
 
 - (IBAction)stepperChanged:(UIStepper *)sender {
-    _myGraph.amp = sender.value;
-    _amplitudeLabel.text = [NSString stringWithFormat:@"%d",_myGraph.amp];
+    self.myGraph.amp = sender.value;
+    self.amplitudeLabel.text = [NSString stringWithFormat:@"%u", (unsigned)self.myGraph.amp];
     
+}
+
+- (void) segmentedAction:(UISegmentedControl*)sender {
+    switch (sender.selectedSegmentIndex) {
+        case 0:
+            self.myGraph.color = [UIColor redColor];
+            break;
+        case 1:
+            self.myGraph.color = [UIColor blueColor];
+            break;
+        case 2:
+            self.myGraph.color = [UIColor greenColor];
+            break;
+        default:
+            break;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
