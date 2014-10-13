@@ -10,6 +10,7 @@
 
 @interface ViewController ()
 @property (weak, nonatomic) GraphView* graphView;
+@property (weak, nonatomic) UIView* backPanel;
 @property (weak, nonatomic) PanelView* panelView;
 @end
 
@@ -38,6 +39,26 @@
     [self.view addSubview:v];
     */
     
+    self.view.backgroundColor = [UIColor blackColor];
+    
+    //graph background
+    UIView* backPanel = [[UIView alloc]initWithFrame:CGRectZero];
+    backPanel.backgroundColor = [UIColor whiteColor];
+    backPanel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    backPanel.clipsToBounds = YES;
+    
+    self.backPanel = backPanel;
+    [self.view addSubview:backPanel];
+    
+    //graph
+    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+    GraphView* graph = [[GraphView alloc] initWithFrame:CGRectZero
+                                             defaultAmp:self.defaultAmp];
+    [graph addGestureRecognizer:panRecognizer];
+    
+    self.graphView = graph;
+    [backPanel addSubview:graph];
+    
     //panel for graph
     PanelView *panelview = [[PanelView alloc] initWithFrame:CGRectZero];
     panelview.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -46,13 +67,9 @@
     [self.view addSubview:panelview];
     self.panelView = panelview;
     
-    //graph
-    GraphView* graph = [[GraphView alloc] initWithFrame:CGRectMake(10, 130, CGRectGetWidth(self.view.frame)-20, 200)];
-    graph.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    //graph.backgroundColor = [UIColor lightGrayColor];
     
-    self.graphView = graph;
-    [self.view addSubview:graph];    
+    
+    
     
 }
 
@@ -60,8 +77,13 @@
 {
     [super viewWillAppear:animated];
     
-    self.graphView.frame = CGRectMake(8, 20 + 8, CGRectGetWidth(self.view.bounds) - 16, 200);
+    self.backPanel.frame = CGRectMake(8, 20 + 8, CGRectGetWidth(self.view.bounds) - 16, 200);
+    self.graphView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 200);
     self.panelView.frame = CGRectMake(8, 20 + 16 + 200, CGRectGetWidth(self.view.bounds) - 16, 128);
+}
+
+- (double)defaultAmp{
+    return 1;
 }
 
 - (void) pan:(UIPanGestureRecognizer*) recognizer {
@@ -99,13 +121,13 @@
 - (void)panelView:(PanelView *)panelView sliderChanged:(UISlider *)slider
 {
     self.graphView.amp = slider.value;
-    self.panelView.amplitudeLabel.text = [NSString stringWithFormat:@"%u", (unsigned)self.graphView.amp];
+    self.panelView.amplitudeLabel.text = [NSString stringWithFormat:@"Amplituda: %lf", self.graphView.amp];
 }
 
 - (void)panelView:(PanelView *)panelView stepperChanged:(UIStepper *)stepper
 {
     self.graphView.amp = stepper.value;
-    self.panelView.amplitudeLabel.text = [NSString stringWithFormat:@"%u", (unsigned)self.graphView.amp];
+    self.panelView.amplitudeLabel.text = [NSString stringWithFormat:@"Amplituda: %lf", self.graphView.amp];
 }
 
 - (void)panelView:(PanelView *)panelView segmentedControlChanged:(UISegmentedControl *)sc

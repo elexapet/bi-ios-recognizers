@@ -10,14 +10,18 @@
 
 @implementation GraphView
 
-@synthesize amp = _amp;
-
-- (NSUInteger)amp{
-    if(!_amp) _amp = 1;
-    return _amp;
+-(instancetype)initWithFrame:(CGRect)frame defaultAmp:(double)defaultAmp{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.amp = defaultAmp;
+        self.opaque = NO;
+    }
+    return self;
 }
 
-- (void)setAmp:(NSUInteger)amp {
+@synthesize amp = _amp;
+
+- (void)setAmp:(double)amp {
     _amp = amp;
     [self setNeedsDisplay];
 }
@@ -42,12 +46,11 @@
     
     CGContextSetStrokeColorWithColor(context, self.color.CGColor);
     CGContextSetLineWidth(context, 1);
-    CGContextSetFillColorWithColor(context, [UIColor greenColor].CGColor);
     
     CGContextMoveToPoint(context, 0, CGRectGetHeight(self.bounds) / 2.0);
-    for (double i = 0; i < CGRectGetWidth(self.frame); i += 3) {
+    for (double i = 0; i < CGRectGetWidth(self.bounds); i += 6) {
         
-        int y = self.amp * 20 * sinf(i) + CGRectGetHeight(self.bounds) / 2.0;
+        CGFloat y = self.amp * 20 * sinf(i) + CGRectGetHeight(self.bounds) / 2.0;
         CGContextAddLineToPoint(context, i, y);
     }
     

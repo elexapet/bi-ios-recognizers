@@ -16,33 +16,39 @@
 
 @implementation PanelView
 
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.backgroundColor = [UIColor lightGrayColor];
+        
+        //self.backgroundColor = [UIColor blackColor];
+    
+        UILabel* label = [[UILabel alloc]initWithFrame:CGRectZero];
+        label.textColor = [UIColor whiteColor];
+        self.amplitudeLabel = label;
+        [self addSubview:label];
     }
-    
-    UILabel* text = [[UILabel alloc]initWithFrame:CGRectZero];
-    self.amplitudeLabel = text;
-    [self addSubview:text];
-    
     return self;
 }
 
--(UIStepper *)stepper{
+- (UIStepper *)stepper{
     if(!_stepper){
         UIStepper* stepper = [[UIStepper alloc] initWithFrame:CGRectZero];
         stepper.minimumValue = 0;
         stepper.maximumValue = 15;
         stepper.stepValue = 0.5;
+        stepper.value = self.delegate.defaultAmp;
         [stepper addTarget:self
                     action:@selector(stepperValueChanged:)
           forControlEvents:UIControlEventTouchUpInside];
         
         _stepper = stepper;
         [self addSubview:stepper];
+        
+        [self.delegate panelView:self
+                  stepperChanged:stepper];
+
     }
     return _stepper;
 }
@@ -52,6 +58,7 @@
         UISlider *slider = [[UISlider alloc] initWithFrame:CGRectZero];
         slider.minimumValue = 0;
         slider.maximumValue = 15;
+        slider.value = self.delegate.defaultAmp;
         [slider addTarget:self
                    action:@selector(sliderValueChanged:)
          forControlEvents:UIControlEventValueChanged];
@@ -84,6 +91,7 @@
     self.slider.frame = CGRectMake(8, 8, CGRectGetWidth(self.bounds) - 16, 44);
     self.stepper.frame = CGRectMake(8, 8 + 44 + 8, CGRectGetWidth(self.bounds) - 16, 44);
     self.segmentedControl.frame = CGRectMake(16 + CGRectGetWidth(self.stepper.bounds), 8 + 44 + 8, CGRectGetWidth(self.bounds) - CGRectGetWidth(self.stepper.bounds) - 24, CGRectGetHeight(self.stepper.bounds));
+    self.amplitudeLabel.frame = CGRectMake(8, 8 + 44 + 8 + CGRectGetHeight(self.stepper.bounds) + 8, CGRectGetWidth(self.bounds) - 16, 30);
 }
 
 - (void)stepperValueChanged:(UIStepper *)stepper

@@ -12,5 +12,7 @@
 
 @interface ViewController : UIViewController <PanelViewDelegate>
 
+@property (nonatomic, readonly) double defaultAmp;
+
 @end
 

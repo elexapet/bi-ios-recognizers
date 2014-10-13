@@ -10,7 +10,9 @@
 
 @interface GraphView : UIView
 
-@property (nonatomic, assign) NSUInteger amp;
+- (instancetype)initWithFrame:(CGRect)frame defaultAmp:(double)defaultAmp;
+
+@property (nonatomic, assign) double amp;
 @property (nonatomic, strong) UIColor* color;
 
 @end

@@ -22,5 +22,6 @@
 - (void)panelView:(PanelView *)panelView sliderChanged:(UISlider *)slider;
 - (void)panelView:(PanelView *)panelView stepperChanged:(UIStepper *)stepper;
 - (void)panelView:(PanelView *)panelView segmentedControlChanged:(UISegmentedControl *)sc;
+@property (nonatomic, readonly) double defaultAmp;
 
 @end
