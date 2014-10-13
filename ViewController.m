@@ -65,12 +65,7 @@
     panelview.delegate = self;
     
     [self.view addSubview:panelview];
-    self.panelView = panelview;
-    
-    
-    
-    
-    
+    self.panelView = panelview;    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -80,6 +75,10 @@
     self.backPanel.frame = CGRectMake(8, 20 + 8, CGRectGetWidth(self.view.bounds) - 16, 200);
     self.graphView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 200);
     self.panelView.frame = CGRectMake(8, 20 + 16 + 200, CGRectGetWidth(self.view.bounds) - 16, 128);
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
 }
 
 - (double)defaultAmp{
