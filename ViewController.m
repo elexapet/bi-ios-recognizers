@@ -9,15 +9,16 @@
 #import "ViewController.h"
 
 @interface ViewController ()
-@property (weak, nonatomic) UISegmentedControl* mySegmentedControl;
+@property (weak, nonatomic) GraphView* graphView;
+@property (weak, nonatomic) PanelView* panelView;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    
+    /*
+    //Red rectangle with geasture recognizers
     UIView* v = [[UIView alloc] initWithFrame:CGRectMake(10, 20, 100, 100)];
     v.backgroundColor = [UIColor redColor];
     
@@ -35,24 +36,32 @@
     [tapGesture requireGestureRecognizerToFail:doubleTapGesture];
     
     [self.view addSubview:v];
+    */
     
+    //panel for graph
+    PanelView *panelview = [[PanelView alloc] initWithFrame:CGRectZero];
+    panelview.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    panelview.delegate = self;
+    
+    [self.view addSubview:panelview];
+    self.panelView = panelview;
+    
+    //graph
     GraphView* graph = [[GraphView alloc] initWithFrame:CGRectMake(10, 130, CGRectGetWidth(self.view.frame)-20, 200)];
-    graph.backgroundColor = [UIColor lightGrayColor];
-   
-    self.myGraph = graph;
+    graph.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    //graph.backgroundColor = [UIColor lightGrayColor];
     
-    [self.view addSubview:graph];
+    self.graphView = graph;
+    [self.view addSubview:graph];    
     
+}
 
-    UISegmentedControl* sc = [[UISegmentedControl alloc] initWithItems:@[@"Red",@"Blue",@"Green"]];
-    sc.center = CGPointMake(self.view.frame.size.width-sc.frame.size.width/2-10, 338+sc.frame.size.height/2);
-    sc.selectedSegmentIndex = 0;
-    [sc addTarget:self action:@selector(segmentedAction:) forControlEvents:UIControlEventValueChanged];
-    self.mySegmentedControl = sc;
-    [self.view addSubview:sc];
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     
-    
-    
+    self.graphView.frame = CGRectMake(8, 20 + 8, CGRectGetWidth(self.view.bounds) - 16, 200);
+    self.panelView.frame = CGRectMake(8, 20 + 16 + 200, CGRectGetWidth(self.view.bounds) - 16, 128);
 }
 
 - (void) pan:(UIPanGestureRecognizer*) recognizer {
@@ -87,22 +96,29 @@
     NSLog(@"DoubleTap");
 }
 
-- (IBAction)stepperChanged:(UIStepper *)sender {
-    self.myGraph.amp = sender.value;
-    self.amplitudeLabel.text = [NSString stringWithFormat:@"%u", (unsigned)self.myGraph.amp];
-    
+- (void)panelView:(PanelView *)panelView sliderChanged:(UISlider *)slider
+{
+    self.graphView.amp = slider.value;
+    self.panelView.amplitudeLabel.text = [NSString stringWithFormat:@"%u", (unsigned)self.graphView.amp];
 }
 
-- (void) segmentedAction:(UISegmentedControl*)sender {
-    switch (sender.selectedSegmentIndex) {
+- (void)panelView:(PanelView *)panelView stepperChanged:(UIStepper *)stepper
+{
+    self.graphView.amp = stepper.value;
+    self.panelView.amplitudeLabel.text = [NSString stringWithFormat:@"%u", (unsigned)self.graphView.amp];
+}
+
+- (void)panelView:(PanelView *)panelView segmentedControlChanged:(UISegmentedControl *)sc
+{
+    switch (sc.selectedSegmentIndex) {
         case 0:
-            self.myGraph.color = [UIColor redColor];
+            self.graphView.color = [UIColor redColor];
             break;
         case 1:
-            self.myGraph.color = [UIColor blueColor];
+            self.graphView.color = [UIColor blueColor];
             break;
         case 2:
-            self.myGraph.color = [UIColor greenColor];
+            self.graphView.color = [UIColor greenColor];
             break;
         default:
             break;

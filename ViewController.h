@@ -8,13 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "GraphView.h"
+#import "PanelView.h"
 
-
-@interface ViewController : UIViewController
-
-- (IBAction)stepperChanged:(UIStepper *)sender;
-@property (weak, nonatomic) IBOutlet UILabel *amplitudeLabel;
-@property (nonatomic,weak)  IBOutlet GraphView* myGraph;
+@interface ViewController : UIViewController <PanelViewDelegate>
 
 @end
 

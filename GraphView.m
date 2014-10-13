@@ -10,18 +10,11 @@
 
 @implementation GraphView
 
+@synthesize amp = _amp;
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if(self) {
-        _amp = 1;
-    }
-    
-    return self;
-}
-
-- (void)awakeFromNib {
-    _amp = 1;
+- (NSUInteger)amp{
+    if(!_amp) _amp = 1;
+    return _amp;
 }
 
 - (void)setAmp:(NSUInteger)amp {
@@ -47,17 +40,9 @@
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    //nasledujici 2 radky "neexistuji"
-    //[[UIColor blackColor] setFill];
-    //CGContextFillRect(context, self.bounds);
-
-    
     CGContextSetStrokeColorWithColor(context, self.color.CGColor);
     CGContextSetLineWidth(context, 1);
     CGContextSetFillColorWithColor(context, [UIColor greenColor].CGColor);
-    
-    //[[UIColor whiteColor] setFill]; // setStroke
-    
     
     CGContextMoveToPoint(context, 0, CGRectGetHeight(self.bounds) / 2.0);
     for (double i = 0; i < CGRectGetWidth(self.frame); i += 3) {
