@@ -73,7 +73,9 @@
     [super viewWillAppear:animated];
     
     self.backPanel.frame = CGRectMake(8, 20 + 8, CGRectGetWidth(self.view.bounds) - 16, 200);
-    self.graphView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 200);
+    int graphHeight = 200*3;
+    int graphWidth = CGRectGetWidth(self.view.bounds)*3;
+    self.graphView.frame = CGRectMake(0-graphWidth/3, 0-graphHeight/3, graphWidth, graphHeight);
     self.panelView.frame = CGRectMake(8, 20 + 16 + 200, CGRectGetWidth(self.view.bounds) - 16, 128);
 }
 
@@ -120,13 +122,13 @@
 - (void)panelView:(PanelView *)panelView sliderChanged:(UISlider *)slider
 {
     self.graphView.amp = slider.value;
-    self.panelView.amplitudeLabel.text = [NSString stringWithFormat:@"Amplituda: %lf", self.graphView.amp];
+    self.panelView.amplitudeLabel.text = [NSString stringWithFormat:@"Amplituda: %.1lf", self.graphView.amp];
 }
 
 - (void)panelView:(PanelView *)panelView stepperChanged:(UIStepper *)stepper
 {
     self.graphView.amp = stepper.value;
-    self.panelView.amplitudeLabel.text = [NSString stringWithFormat:@"Amplituda: %lf", self.graphView.amp];
+    self.panelView.amplitudeLabel.text = [NSString stringWithFormat:@"Amplituda: %.1lf", self.graphView.amp];
 }
 
 - (void)panelView:(PanelView *)panelView segmentedControlChanged:(UISegmentedControl *)sc
